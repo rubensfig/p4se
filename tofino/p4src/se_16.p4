@@ -194,7 +194,7 @@ PARSER_INGRESS {
 
 CTL_EGRESS {
     @name("._drop") action _drop() {
-        MARK_TO_DROP();
+        EG_MARK_TO_DROP();
     }
     @name(".a_ds_pppoe_aftermath_v4") action a_ds_pppoe_aftermath_v4() {
         hdr.pppoe.totalLength = hdr.ipv4.totalLen + 16w2;
@@ -301,7 +301,7 @@ CTL_INGRESSUPSTREAM {
     }
     @name(".a_us_routev4v6") action a_us_routev4v6(bit<9> out_port, bit<20> mpls0_label, bit<20> mpls1_label, bit<48> via_hwaddr) {
         hdr.vlan_service.setInvalid();
-        standard_metadata.egress_spec = out_port;
+        SET_EGRESS_PORT(out_port);
         hdr.mpls0.label = mpls0_label;
         hdr.mpls1.label = mpls1_label;
         hdr.ethernet_outer.dstAddr = via_hwaddr;
@@ -361,7 +361,7 @@ CTL_INGRESSUPSTREAM {
             a_line_map_pass;
         }
         key = {
-            standard_metadata.ingress_port: exact;
+            GET_INGRESS_PORT		  : exact;
             hdr.mpls0.label               : exact;
             hdr.mpls1.label               : exact;
             hdr.vlan_subsc.vlanID         : exact;
@@ -486,7 +486,7 @@ CTL_INGRESSDOWNSTREAM {
         hdr.pppoe.version = 4w1;
         hdr.pppoe.typeID = 4w1;
         hdr.pppoe.sessionID = pppoe_session_id;
-        standard_metadata.egress_spec = out_port;
+        SET_EGRESS_PORT(out_port);
         meta.ingress_md.ctr_bucket = ctr_bucket;
     }
     @name(".a_ds_route_nextpm") action a_ds_route_nextpm() {
@@ -594,23 +594,23 @@ CTL_INGRESS {
         hdr.ethernet_outer.dstAddr = hdr.bng_cp.eth_dstAddr;
         hdr.ethernet_outer.srcAddr = hdr.bng_cp.eth_srcAddr;
         hdr.ethernet_outer.etherType = hdr.bng_cp.eth_etherType;
-        standard_metadata.egress_spec = (bit<9>)hdr.bng_cp.fwd_port;
+        SET_EGRESS_PORT((bit<9>)hdr.bng_cp.fwd_port);
         meta.ingress_md.cp = 1w1;
         hdr.bng_cp.setInvalid();
     }
     @name("._drop") action _drop() {
-        mark_to_drop(standard_metadata);
+        IN_MARK_TO_DROP();
     }
     @name(".a_bng_tocp") action a_bng_tocp(bit<48> ourOuterMAC, bit<48> remoteOuterMAC, bit<9> cpPhysicalPort) {
         hdr.bng_cp.setValid();
         hdr.bng_cp.eth_dstAddr = hdr.ethernet_outer.dstAddr;
         hdr.bng_cp.eth_srcAddr = hdr.ethernet_outer.srcAddr;
         hdr.bng_cp.eth_etherType = hdr.ethernet_outer.etherType;
-        hdr.bng_cp.fwd_port = (bit<32>)standard_metadata.ingress_port;
+        hdr.bng_cp.fwd_port = (bit<32>)GET_INGRESS_PORT;
         hdr.ethernet_outer.dstAddr = remoteOuterMAC;
         hdr.ethernet_outer.srcAddr = ourOuterMAC;
         hdr.ethernet_outer.etherType = 16w0x8765;
-        standard_metadata.egress_spec = cpPhysicalPort;
+        SET_EGRESS_PORT(cpPhysicalPort);
     }
     @name(".a_cptap_cp") action a_cptap_cp() {
         meta.ingress_md.cp = 1w1;
@@ -635,7 +635,7 @@ CTL_INGRESS {
         key = {
             hdr.ethernet_outer.dstAddr    : exact;
             hdr.ethernet_outer.srcAddr    : exact;
-            standard_metadata.ingress_port: exact;
+            GET_INGRESS_PORT		  : exact;
         }
         max_size = 16;
     }
@@ -644,7 +644,7 @@ CTL_INGRESS {
             a_bng_tocp;
         }
         key = {
-            standard_metadata.ingress_port: exact;
+            GET_INGRESS_PORT: exact;
         }
         max_size = 16;
     }
@@ -667,7 +667,7 @@ CTL_INGRESS {
         }
         key = {
             hdr.ethernet_outer.dstAddr    : exact;
-            standard_metadata.ingress_port: exact;
+            GET_INGRESS_PORT		  : exact;
             hdr.mpls0.label               : exact;
         }
         max_size = 256;
@@ -682,10 +682,10 @@ CTL_INGRESS {
             if (meta.ingress_md.cp == 1w0) {
                 t_usds.apply();
                 if (meta.ingress_md.usds == 2w0x1 && hdr.pppoe.isValid()) {
-                    ingress_upstream_0.apply(hdr, meta, standard_metadata);
+                    ingress_upstream_0.apply(hdr, ig_md, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
                 } else {
                     if (meta.ingress_md.usds == 2w0x0) {
-                        ingress_downstream_0.apply(hdr, meta, standard_metadata);
+                        ingress_downstream_0.apply(hdr, ig_md, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
                     }
                 }
             }

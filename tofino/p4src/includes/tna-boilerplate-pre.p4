@@ -13,11 +13,13 @@
 #define CTL_EGRESS_DEPARSER   control SwitchEgressDeparser(packet_out pkt, inout headers_t hdr, in metadata_t meta, in egress_intrinsic_metadata_for_deparser_t eg_dprsr_md)
 #define CTL_EGRESS            control SwitchEgress(inout headers_t hdr, inout metadata_t meta, in egress_intrinsic_metadata_t eg_intr_md, in egress_intrinsic_metadata_from_parser_t eg_prsr_md, inout egress_intrinsic_metadata_for_deparser_t eg_dprsr_md, inout egress_intrinsic_metadata_for_output_port_t eg_oport_md)
 
-#define MARK_TO_DROP()         ig_dprsr_md.drop_ctl = 1
+#define IN_MARK_TO_DROP()	ig_dprsr_md.drop_ctl = 1
+#define EG_MARK_TO_DROP()	eg_dprsr_md.drop_ctl = 1
 
-#define SET_EGRESS_PORT(value) ig_tm_md.ucast_egress_port = value
-#define GET_EGRESS_PORT	       ig_tm_md.ucast_egress_port
-#define GET_INGRESS_PORT       ig_intr_md.ingress_port
+#define SET_EGRESS_PORT(value) 	ig_tm_md.ucast_egress_port = value
+#define IN_GET_EGRESS_PORT	ig_tm_md.ucast_egress_port
+#define EG_GET_EGRESS_PORT	eg_intr_md.ucast_egress_port
+#define GET_INGRESS_PORT       	ig_intr_md.ingress_port
 
 /*
 *******************************************************************************
