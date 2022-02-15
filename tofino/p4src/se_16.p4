@@ -85,10 +85,14 @@ struct metadata_t {
 struct headers_t {
     @name(".bng_cp") 
     bng_cp_t   bng_cp;
-    @name(".ethernet_inner") 
-    ethernet_t ethernet_inner;
-    @name(".ethernet_outer") 
+    @name(".ethernet_outer")
     ethernet_t ethernet_outer;
+    @name(".vlan_service")
+    vlan_t     vlan_service;
+    @name(".vlan_subsc")
+    vlan_t     vlan_subsc;
+    @name(".pppoe")
+    pppoe_t    pppoe;
     @name(".ipv4") 
     ipv4_t     ipv4;
     @name(".ipv6") 
@@ -97,15 +101,10 @@ struct headers_t {
     mpls_t     mpls0;
     @name(".mpls1") 
     mpls_t     mpls1;
-    @name(".pppoe") 
-    pppoe_t    pppoe;
-    @name(".vlan_service") 
-    vlan_t     vlan_service;
-    @name(".vlan_subsc") 
-    vlan_t     vlan_subsc;
 }
 
 PARSER_INGRESS {
+    TofinoIngressParser() tofino_parser;
 
     @name(".mpls_0_accesslabels") value_set<bit<20>>(4) mpls_0_accesslabels;
     @name(".parse_above_mpls") state parse_above_mpls {
@@ -118,18 +117,12 @@ PARSER_INGRESS {
         pkt.extract(hdr.bng_cp);
         transition accept;
     }
-    @name(".parse_ethernet_inner") state parse_ethernet_inner {
-        pkt.extract(hdr.ethernet_inner);
-        transition select(hdr.ethernet_inner.etherType) {
-            16w0x8100: parse_vlan_subsc;
-            default: accept;
-        }
-    }
     @name(".parse_ethernet_outer") state parse_ethernet_outer {
         pkt.extract(hdr.ethernet_outer);
         transition select(hdr.ethernet_outer.etherType) {
             16w0x8847: parse_mpls0;
             16w0x8765: parse_bng_cp;
+            16w0x8100: accept;
             default: accept;
         }
     }
@@ -188,6 +181,7 @@ PARSER_INGRESS {
         }
     }
     @name(".start") state start {
+        tofino_parser.apply(pkt, ig_intr_md);
         transition parse_ethernet_outer;
     }
 }
