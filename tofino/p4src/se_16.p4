@@ -77,14 +77,14 @@ header vlan_t {
     bit<16> etherType;
 }
 
-struct metadata {
+struct metadata_t {
     @name(".ingress_md") 
     ingress_md_t ingress_md;
     @name(".intrisic_metadata") 
     intrinsic_metadata_t intrisic_md;
 }
 
-struct headers {
+struct headers_t {
     @name(".bng_cp") 
     bng_cp_t   bng_cp;
     @name(".ethernet_inner") 
