@@ -14,13 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-header_type intrinsic_metadata_t {
-    fields {
-        ingress_global_timestamp : 48;
-        # lf_field_list : 32;
-        mcast_grp : 16;
-        egress_rid : 16;
-    }
+header intrinsic_metadata_t {
+        bit<48> ingress_global_timestamp;
+        bit<48> mcast_grp;
+        bit<48> egress_rid;
 }
-
-metadata intrinsic_metadata_t intrinsic_metadata;
