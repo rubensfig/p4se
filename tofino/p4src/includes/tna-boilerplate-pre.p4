@@ -18,7 +18,7 @@
 
 #define SET_EGRESS_PORT(value) 	ig_tm_md.ucast_egress_port = value
 #define IN_GET_EGRESS_PORT	ig_tm_md.ucast_egress_port
-#define EG_GET_EGRESS_PORT	eg_intr_md.ucast_egress_port
+#define EG_GET_EGRESS_PORT	eg_intr_md.egress_port
 #define GET_INGRESS_PORT       	ig_intr_md.ingress_port
 
 /*
