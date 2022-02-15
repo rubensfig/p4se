@@ -109,7 +109,6 @@ PARSER_INGRESS {
     @name(".mpls_0_accesslabels") value_set<bit<20>>(4) mpls_0_accesslabels;
     @name(".parse_above_mpls") state parse_above_mpls {
         transition select(hdr.mpls0.label) {
-            mpls_0_accesslabels: parse_ethernet_inner;
             default: parse_ip;
         }
     }
@@ -203,7 +202,7 @@ CTL_EGRESS {
     @name(".a_ds_srcmac") action a_ds_srcmac(bit<48> outer_src_mac, bit<48> outer_dst_mac, bit<48> inner_src_mac) {
         hdr.ethernet_outer.srcAddr = outer_src_mac;
         hdr.ethernet_outer.dstAddr = outer_dst_mac;
-        hdr.ethernet_inner.srcAddr = inner_src_mac;
+        # hdr.ethernet_inner.srcAddr = inner_src_mac;
     }
     @name("._nop") action _nop() {
     }
@@ -274,7 +273,7 @@ CTL_INGRESSUPSTREAM {
     @name(".a_antispoof_ipv4v6_pass") action a_antispoof_ipv4v6_pass() {
         hdr.pppoe.setInvalid();
         hdr.vlan_subsc.setInvalid();
-        hdr.ethernet_inner.setInvalid();
+        # hdr.ethernet_inner.setInvalid();
     }
     @name(".a_antispoof_ipv4v6_nextpm") action a_antispoof_ipv4v6_nextpm() {
     }
@@ -344,7 +343,7 @@ CTL_INGRESSUPSTREAM {
         key = {
             meta.ingress_md.line_id   : exact;
             hdr.vlan_service.vlanID   : exact;
-            hdr.ethernet_inner.srcAddr: exact;
+            # hdr.ethernet_inner.srcAddr: exact;
             hdr.pppoe.sessionID       : exact;
         }
         max_size = 8192;
@@ -369,7 +368,7 @@ CTL_INGRESSUPSTREAM {
             a_pppoe_cpdp_pass_ip;
         }
         key = {
-            hdr.ethernet_inner.dstAddr: exact;
+            # hdr.ethernet_inner.dstAddr: exact;
             hdr.vlan_service.etherType: exact;
             hdr.pppoe.protocol        : exact;
         }
@@ -468,8 +467,8 @@ CTL_INGRESSDOWNSTREAM {
         hdr.mpls0.label = mpls0_label;
         hdr.mpls1.label = mpls1_label;
         hdr.ethernet_inner.setValid();
-        hdr.ethernet_inner.dstAddr = inner_cpe_mac;
-        hdr.ethernet_inner.etherType = 16w0x8100;
+        # hdr.ethernet_inner.dstAddr = inner_cpe_mac;
+        # hdr.ethernet_inner.etherType = 16w0x8100;
         hdr.vlan_subsc.setValid();
         hdr.vlan_subsc.vlanID = subsc_vid;
         hdr.vlan_subsc.etherType = 16w0x8100;
@@ -712,7 +711,7 @@ CTL_INGRESS_DEPARSER {
         pkt.emit(hdr.bng_cp);
         pkt.emit(hdr.mpls0);
         pkt.emit(hdr.mpls1);
-        pkt.emit(hdr.ethernet_inner);
+        # pkt.emit(hdr.ethernet_inner);
         pkt.emit(hdr.vlan_subsc);
         pkt.emit(hdr.vlan_service);
         pkt.emit(hdr.pppoe);
@@ -727,7 +726,7 @@ CTL_EGRESS_DEPARSER {
         pkt.emit(hdr.bng_cp);
         pkt.emit(hdr.mpls0);
         pkt.emit(hdr.mpls1);
-        pkt.emit(hdr.ethernet_inner);
+        # pkt.emit(hdr.ethernet_inner);
         pkt.emit(hdr.vlan_subsc);
         pkt.emit(hdr.vlan_service);
         pkt.emit(hdr.pppoe);
