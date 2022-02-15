@@ -237,7 +237,7 @@ CTL_EGRESS {
             a_ds_srcmac;
         }
         key = {
-            GET_EGRESS_PORT		 : exact;
+            EG_GET_EGRESS_PORT		 : exact;
             hdr.mpls0.label              : exact;
         }
         max_size = 256;
@@ -248,7 +248,7 @@ CTL_EGRESS {
             a_us_srcmac;
         }
         key = {
-            GET_EGRESS_PORT		 : exact;
+            EG_GET_EGRESS_PORT		 : exact;
             hdr.mpls0.label              : exact;
         }
     }
@@ -682,10 +682,10 @@ CTL_INGRESS {
             if (meta.ingress_md.cp == 1w0) {
                 t_usds.apply();
                 if (meta.ingress_md.usds == 2w0x1 && hdr.pppoe.isValid()) {
-                    ingress_upstream_0.apply(hdr, ig_md, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
+                    ingress_upstream_0.apply(hdr, meta, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
                 } else {
                     if (meta.ingress_md.usds == 2w0x0) {
-                        ingress_downstream_0.apply(hdr, ig_md, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
+                        ingress_downstream_0.apply(hdr, meta, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
                     }
                 }
             }
