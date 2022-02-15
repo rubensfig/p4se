@@ -674,8 +674,8 @@ CTL_INGRESS {
         }
         max_size = 256;
     }
-    @name(".ingress_upstream") ingress_upstream() ingress_upstream_0;
-    @name(".ingress_downstream") ingress_downstream() ingress_downstream_0;
+    @name(".ingress_upstream") IngressUpstream() ingress_upstream_0;
+    @name(".ingress_downstream") IngressDownstream() ingress_downstream_0;
     apply {
         if (hdr.bng_cp.isValid()) {
             t_bng_fromcp.apply();
