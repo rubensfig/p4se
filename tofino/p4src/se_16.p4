@@ -595,14 +595,14 @@ CTL_INGRESS {
         IN_MARK_TO_DROP();
     }
     @name(".a_bng_tocp") action a_bng_tocp(bit<48> ourOuterMAC, bit<48> remoteOuterMAC, bit<9> cpPhysicalPort) {
-        hdr.bng_cp.setValid();
-        hdr.bng_cp.eth_dstAddr = hdr.ethernet_outer.dstAddr;
-        hdr.bng_cp.eth_srcAddr = hdr.ethernet_outer.srcAddr;
-        hdr.bng_cp.eth_etherType = hdr.ethernet_outer.etherType;
-        hdr.bng_cp.fwd_port = (bit<32>)GET_INGRESS_PORT;
-        hdr.ethernet_outer.dstAddr = remoteOuterMAC;
-        hdr.ethernet_outer.srcAddr = ourOuterMAC;
-        hdr.ethernet_outer.etherType = 16w0x8765;
+        # hdr.bng_cp.setValid();
+        # hdr.bng_cp.eth_dstAddr = hdr.ethernet_outer.dstAddr;
+        # hdr.bng_cp.eth_srcAddr = hdr.ethernet_outer.srcAddr;
+        # hdr.bng_cp.eth_etherType = hdr.ethernet_outer.etherType;
+        # hdr.bng_cp.fwd_port = (bit<32>)GET_INGRESS_PORT;
+        # hdr.ethernet_outer.dstAddr = remoteOuterMAC;
+        # hdr.ethernet_outer.srcAddr = ourOuterMAC;
+        # hdr.ethernet_outer.etherType = 16w0x8765;
         SET_EGRESS_PORT(cpPhysicalPort);
     }
     @name(".a_cptap_cp") action a_cptap_cp() {
