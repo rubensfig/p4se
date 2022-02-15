@@ -3,8 +3,8 @@
 #include <core.p4>
 #include <tna.p4>
 
-#include "../Open-Tofino/p4-examples/p4_16_programs/common/headers.p4"
-#include "../Open-Tofino/p4-examples/p4_16_programs/common/util.p4"
+#include "Open-Tofino/p4-examples/p4_16_programs/common/headers.p4"
+#include "Open-Tofino/p4-examples/p4_16_programs/common/util.p4"
 #include "intrisic.p4"
 
 #define PARSER_INGRESS 	      parser SwitchIngressParser(packet_in pkt, out headers_t hdr, out metadata_t ig_md, out ingress_intrinsic_metadata_t ig_intr_md)

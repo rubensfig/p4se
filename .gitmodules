@@ -1,0 +1,3 @@
+[submodule "tofino/p4src/includes/Open-Tofino"]
+	path = tofino/p4src/includes/Open-Tofino
+	url = git@github.com:barefootnetworks/Open-Tofino.git
