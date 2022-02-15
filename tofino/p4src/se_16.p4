@@ -457,7 +457,7 @@ CTL_INGRESSUPSTREAM {
 # 
 # @name(".mtr_ds_prio") meter<bit<13>>(32w8192, MeterType.bytes) mtr_ds_prio;
 
-CTL_INGRESSDOWNSTREAM
+CTL_INGRESSDOWNSTREAM {
     @name(".a_ds_acl_qos_prio") action a_ds_acl_qos_prio() {
         # mtr_ds_prio.execute_meter((bit<13>)(bit<13>)meta.ingress_md.ctr_bucket, meta.ingress_md.meter_result);
         # ctr_ds_subsc.count((bit<13>)(bit<13>)meta.ingress_md.ctr_bucket);
