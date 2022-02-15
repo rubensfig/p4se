@@ -365,7 +365,6 @@ CTL_INGRESSUPSTREAM {
         actions = {
             _mark_drop;
             a_pppoe_cpdp_to_cp;
-        key = {
             a_pppoe_cpdp_pass_ip;
         }
         key = {
