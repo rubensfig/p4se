@@ -194,7 +194,7 @@ PARSER_INGRESS {
 
 CTL_EGRESS {
     @name("._drop") action _drop() {
-        mark_to_drop(standard_metadata);
+        MARK_TO_DROP();
     }
     @name(".a_ds_pppoe_aftermath_v4") action a_ds_pppoe_aftermath_v4() {
         hdr.pppoe.totalLength = hdr.ipv4.totalLen + 16w2;
@@ -237,7 +237,7 @@ CTL_EGRESS {
             a_ds_srcmac;
         }
         key = {
-            standard_metadata.egress_port: exact;
+            GET_EGRESS_PORT		 : exact;
             hdr.mpls0.label              : exact;
         }
         max_size = 256;
@@ -248,7 +248,7 @@ CTL_EGRESS {
             a_us_srcmac;
         }
         key = {
-            standard_metadata.egress_port: exact;
+            GET_EGRESS_PORT		 : exact;
             hdr.mpls0.label              : exact;
         }
     }
