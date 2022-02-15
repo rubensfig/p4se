@@ -5,7 +5,7 @@
 
 #include "Open-Tofino/p4-examples/p4_16_programs/common/headers.p4"
 #include "Open-Tofino/p4-examples/p4_16_programs/common/util.p4"
-#include "./intrisic.p4"
+#include "./intrinsic.p4"
 
 #define PARSER_INGRESS 	      parser SwitchIngressParser(packet_in pkt, out headers_t hdr, out metadata_t ig_md, out ingress_intrinsic_metadata_t ig_intr_md)
 #define CTL_INGRESS_DEPARSER  control SwitchIngressDeparser(packet_out pkt, inout headers_t hdr, in metadata_t ig_md, in ingress_intrinsic_metadata_for_deparser_t ig_dprsr_md)
