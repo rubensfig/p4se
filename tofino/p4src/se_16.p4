@@ -121,7 +121,7 @@ PARSER_INGRESS {
         transition select(hdr.ethernet_outer.etherType) {
             16w0x8847: parse_mpls0;
             16w0x8765: parse_bng_cp;
-            16w0x8100: accept;
+            16w0x8100: parse_vlan_subsc;
             default: accept;
         }
     }
@@ -626,7 +626,6 @@ CTL_INGRESS {
             _drop;
         }
         key = {
-            hdr.ethernet_outer.dstAddr    : exact;
             hdr.ethernet_outer.srcAddr    : exact;
             GET_INGRESS_PORT		  : exact;
         }
@@ -668,8 +667,8 @@ CTL_INGRESS {
     @name(".ingress_upstream") IngressUpstream() ingress_upstream_0;
     @name(".ingress_downstream") IngressDownstream() ingress_downstream_0;
     apply {
+        t_bng_fromcp.apply();
         if (hdr.bng_cp.isValid()) {
-            t_bng_fromcp.apply();
         } else {
             t_cptap_outer_ethernet.apply();
             if (meta.ingress_md.cp == 1w0) {
@@ -678,7 +677,7 @@ CTL_INGRESS {
                     ingress_upstream_0.apply(hdr, meta, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
                 } else {
                     if (meta.ingress_md.usds == 2w0x0) {
-                        ingress_downstream_0.apply(hdr, meta, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
+                    ingress_downstream_0.apply(hdr, meta, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
                     }
                 }
             }
