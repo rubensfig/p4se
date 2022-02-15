@@ -115,18 +115,18 @@ PARSER_INGRESS {
         }
     }
     @name(".parse_bng_cp") state parse_bng_cp {
-        packet.extract(hdr.bng_cp);
+        pkt.extract(hdr.bng_cp);
         transition accept;
     }
     @name(".parse_ethernet_inner") state parse_ethernet_inner {
-        packet.extract(hdr.ethernet_inner);
+        pkt.extract(hdr.ethernet_inner);
         transition select(hdr.ethernet_inner.etherType) {
             16w0x8100: parse_vlan_subsc;
             default: accept;
         }
     }
     @name(".parse_ethernet_outer") state parse_ethernet_outer {
-        packet.extract(hdr.ethernet_outer);
+        pkt.extract(hdr.ethernet_outer);
         transition select(hdr.ethernet_outer.etherType) {
             16w0x8847: parse_mpls0;
             16w0x8765: parse_bng_cp;
@@ -134,36 +134,36 @@ PARSER_INGRESS {
         }
     }
     @name(".parse_ip") state parse_ip {
-        transition select((packet.lookahead<bit<4>>())[3:0]) {
+        transition select((pkt.lookahead<bit<4>>())[3:0]) {
             4w4: parse_ipv4;
             4w6: parse_ipv6;
             default: accept;
         }
     }
     @name(".parse_ipv4") state parse_ipv4 {
-        packet.extract(hdr.ipv4);
+        pkt.extract(hdr.ipv4);
         transition accept;
     }
     @name(".parse_ipv6") state parse_ipv6 {
-        packet.extract(hdr.ipv6);
+        pkt.extract(hdr.ipv6);
         transition accept;
     }
     @name(".parse_mpls0") state parse_mpls0 {
-        packet.extract(hdr.mpls0);
+        pkt.extract(hdr.mpls0);
         transition select(hdr.mpls0.s) {
             1w1: accept;
             default: parse_mpls1;
         }
     }
     @name(".parse_mpls1") state parse_mpls1 {
-        packet.extract(hdr.mpls1);
+        pkt.extract(hdr.mpls1);
         transition select(hdr.mpls1.s) {
             1w1: parse_above_mpls;
             default: accept;
         }
     }
     @name(".parse_pppoe") state parse_pppoe {
-        packet.extract(hdr.pppoe);
+        pkt.extract(hdr.pppoe);
         transition select(hdr.pppoe.protocol) {
             16w0x21: parse_ip;
             16w0x57: parse_ip;
@@ -171,7 +171,7 @@ PARSER_INGRESS {
         }
     }
     @name(".parse_vlan_service") state parse_vlan_service {
-        packet.extract(hdr.vlan_service);
+        pkt.extract(hdr.vlan_service);
         transition select(hdr.vlan_service.etherType) {
             16w0x8863: parse_pppoe;
             16w0x8864: parse_pppoe;
@@ -179,7 +179,7 @@ PARSER_INGRESS {
         }
     }
     @name(".parse_vlan_subsc") state parse_vlan_subsc {
-        packet.extract(hdr.vlan_subsc);
+        pkt.extract(hdr.vlan_subsc);
         transition select(hdr.vlan_subsc.etherType) {
             16w0x8100: parse_vlan_service;
             16w0x8863: parse_pppoe;
@@ -271,7 +271,7 @@ CTL_EGRESS {
     }
 }
 
-# @name(".ctr_us_subsc") counter<bit<13>>(32w8192, CounterType.packets) ctr_us_subsc;
+# @name(".ctr_us_subsc") counter<bit<13>>(32w8192, CounterType.pkts) ctr_us_subsc;
 
 CTL_INGRESSUPSTREAM {
     @name("._mark_drop") action _mark_drop() {
@@ -449,7 +449,7 @@ CTL_INGRESSUPSTREAM {
     }
 }
 
-# @name(".ctr_ds_subsc") counter<bit<13>>(32w8192, CounterType.packets) ctr_ds_subsc;
+# @name(".ctr_ds_subsc") counter<bit<13>>(32w8192, CounterType.pkts) ctr_ds_subsc;
 # 
 # @name(".mtr_ds_besteff") meter<bit<13>>(32w8192, MeterType.bytes) mtr_ds_besteff;
 # 
@@ -714,31 +714,31 @@ PARSER_EGRESS {
 
 CTL_INGRESS_DEPARSER {
     apply {
-        packet.emit(hdr.ethernet_outer);
-        packet.emit(hdr.bng_cp);
-        packet.emit(hdr.mpls0);
-        packet.emit(hdr.mpls1);
-        packet.emit(hdr.ethernet_inner);
-        packet.emit(hdr.vlan_subsc);
-        packet.emit(hdr.vlan_service);
-        packet.emit(hdr.pppoe);
-        packet.emit(hdr.ipv6);
-        packet.emit(hdr.ipv4);
+        pkt.emit(hdr.ethernet_outer);
+        pkt.emit(hdr.bng_cp);
+        pkt.emit(hdr.mpls0);
+        pkt.emit(hdr.mpls1);
+        pkt.emit(hdr.ethernet_inner);
+        pkt.emit(hdr.vlan_subsc);
+        pkt.emit(hdr.vlan_service);
+        pkt.emit(hdr.pppoe);
+        pkt.emit(hdr.ipv6);
+        pkt.emit(hdr.ipv4);
     }
 }
 
 CTL_EGRESS_DEPARSER {
     apply {
-        packet.emit(hdr.ethernet_outer);
-        packet.emit(hdr.bng_cp);
-        packet.emit(hdr.mpls0);
-        packet.emit(hdr.mpls1);
-        packet.emit(hdr.ethernet_inner);
-        packet.emit(hdr.vlan_subsc);
-        packet.emit(hdr.vlan_service);
-        packet.emit(hdr.pppoe);
-        packet.emit(hdr.ipv6);
-        packet.emit(hdr.ipv4);
+        pkt.emit(hdr.ethernet_outer);
+        pkt.emit(hdr.bng_cp);
+        pkt.emit(hdr.mpls0);
+        pkt.emit(hdr.mpls1);
+        pkt.emit(hdr.ethernet_inner);
+        pkt.emit(hdr.vlan_subsc);
+        pkt.emit(hdr.vlan_service);
+        pkt.emit(hdr.pppoe);
+        pkt.emit(hdr.ipv6);
+        pkt.emit(hdr.ipv4);
     }
 }
 
