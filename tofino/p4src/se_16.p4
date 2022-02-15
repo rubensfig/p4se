@@ -466,7 +466,7 @@ CTL_INGRESSDOWNSTREAM {
     @name(".a_ds_route_pushstack") action a_ds_route_pushstack(bit<20> mpls0_label, bit<20> mpls1_label, bit<16> subsc_vid, bit<16> service_vid, bit<16> pppoe_session_id, bit<9> out_port, bit<48> inner_cpe_mac, bit<16> ctr_bucket) {
         hdr.mpls0.label = mpls0_label;
         hdr.mpls1.label = mpls1_label;
-        hdr.ethernet_inner.setValid();
+        # hdr.ethernet_inner.setValid();
         # hdr.ethernet_inner.dstAddr = inner_cpe_mac;
         # hdr.ethernet_inner.etherType = 16w0x8100;
         hdr.vlan_subsc.setValid();
