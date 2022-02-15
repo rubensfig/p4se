@@ -595,7 +595,7 @@ CTL_INGRESS {
     @name("._drop") action _drop() {
         IN_MARK_TO_DROP();
     }
-    @name(".a_bng_tocp") action a_bng_tocp(bit<48> ourOuterMAC, bit<48> remoteOuterMAC, bit<9> cpPhysicalPort) {
+    @name(".a_bng_tocp") action a_bng_tocp(bit<9> cpPhysicalPort) {
         # hdr.bng_cp.setValid();
         # hdr.bng_cp.eth_dstAddr = hdr.ethernet_outer.dstAddr;
         # hdr.bng_cp.eth_srcAddr = hdr.ethernet_outer.srcAddr;
