@@ -365,6 +365,7 @@ CTL_INGRESSUPSTREAM {
         actions = {
             _mark_drop;
             a_pppoe_cpdp_to_cp;
+        key = {
             a_pppoe_cpdp_pass_ip;
         }
         key = {
@@ -583,13 +584,14 @@ CTL_INGRESSDOWNSTREAM {
 }
 
 CTL_INGRESS {
-    @name(".a_bng_output") action a_bng_output() {
-        hdr.ethernet_outer.dstAddr = hdr.bng_cp.eth_dstAddr;
-        hdr.ethernet_outer.srcAddr = hdr.bng_cp.eth_srcAddr;
-        hdr.ethernet_outer.etherType = hdr.bng_cp.eth_etherType;
-        SET_EGRESS_PORT((bit<9>)hdr.bng_cp.fwd_port);
+    @name(".a_bng_output") action a_bng_output(PortId_t egress_port) {
+        # hdr.ethernet_outer.dstAddr = hdr.bng_cp.eth_dstAddr;
+        # hdr.ethernet_outer.srcAddr = hdr.bng_cp.eth_srcAddr;
+        # hdr.ethernet_outer.etherType = hdr.bng_cp.eth_etherType;
+        # SET_EGRESS_PORT((bit<9>)hdr.bng_cp.fwd_port);
+        SET_EGRESS_PORT(egress_port);
         meta.ingress_md.cp = 1w1;
-        hdr.bng_cp.setInvalid();
+        # hdr.bng_cp.setInvalid();
     }
     @name("._drop") action _drop() {
         IN_MARK_TO_DROP();
