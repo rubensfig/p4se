@@ -273,7 +273,7 @@ CTL_EGRESS {
     }
 }
 
-@name(".ctr_us_subsc") counter<bit<13>>(32w8192, CounterType.packets) ctr_us_subsc;
+# @name(".ctr_us_subsc") counter<bit<13>>(32w8192, CounterType.packets) ctr_us_subsc;
 
 CTL_INGRESSUPSTREAM {
     @name("._mark_drop") action _mark_drop() {
@@ -288,7 +288,7 @@ CTL_INGRESSUPSTREAM {
     }
     @name(".a_antispoof_mac_pass") action a_antispoof_mac_pass(bit<8> subsc_id, bit<13> ctr_bucket) {
         meta.ingress_md.subsc_id = subsc_id;
-        ctr_us_subsc.count((bit<13>)ctr_bucket);
+        # ctr_us_subsc.count((bit<13>)ctr_bucket);
     }
     @name(".a_line_map_pass") action a_line_map_pass(bit<32> line_id) {
         meta.ingress_md.line_id = line_id;
@@ -451,20 +451,20 @@ CTL_INGRESSUPSTREAM {
     }
 }
 
-@name(".ctr_ds_subsc") counter<bit<13>>(32w8192, CounterType.packets) ctr_ds_subsc;
-
+# @name(".ctr_ds_subsc") counter<bit<13>>(32w8192, CounterType.packets) ctr_ds_subsc;
+# 
 @name(".mtr_ds_besteff") meter<bit<13>>(32w8192, MeterType.bytes) mtr_ds_besteff;
-
+# 
 @name(".mtr_ds_prio") meter<bit<13>>(32w8192, MeterType.bytes) mtr_ds_prio;
 
 CTL_INGRESSDOWNSTREAM
     @name(".a_ds_acl_qos_prio") action a_ds_acl_qos_prio() {
         mtr_ds_prio.execute_meter((bit<13>)(bit<13>)meta.ingress_md.ctr_bucket, meta.ingress_md.meter_result);
-        ctr_ds_subsc.count((bit<13>)(bit<13>)meta.ingress_md.ctr_bucket);
+        # ctr_ds_subsc.count((bit<13>)(bit<13>)meta.ingress_md.ctr_bucket);
     }
     @name(".a_ds_acl_qos_besteff") action a_ds_acl_qos_besteff() {
         mtr_ds_besteff.execute_meter((bit<13>)(bit<13>)meta.ingress_md.ctr_bucket, meta.ingress_md.meter_result);
-        ctr_ds_subsc.count((bit<13>)(bit<13>)meta.ingress_md.ctr_bucket);
+        # ctr_ds_subsc.count((bit<13>)(bit<13>)meta.ingress_md.ctr_bucket);
     }
     @name("._mark_drop") action _mark_drop() {
         meta.ingress_md.usds = 2w0x2;
