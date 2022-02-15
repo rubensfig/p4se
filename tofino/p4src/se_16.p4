@@ -80,8 +80,6 @@ header vlan_t {
 struct metadata_t {
     @name(".ingress_md") 
     ingress_md_t ingress_md;
-    @name(".intrisic_metadata") 
-    intrinsic_metadata_t intrisic_md;
 }
 
 struct headers_t {
