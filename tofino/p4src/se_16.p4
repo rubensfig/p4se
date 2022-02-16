@@ -106,6 +106,11 @@ struct headers_t {
 PARSER_INGRESS {
     TofinoIngressParser() tofino_parser;
 
+    @name(".start") state start {
+        tofino_parser.apply(pkt, ig_intr_md);
+        transition parse_ethernet_outer;
+    }
+
     @name(".mpls_0_accesslabels") value_set<bit<20>>(4) mpls_0_accesslabels;
     @name(".parse_above_mpls") state parse_above_mpls {
         transition select(hdr.mpls0.label) {
@@ -178,10 +183,6 @@ PARSER_INGRESS {
             16w0x8864: parse_pppoe;
             default: accept;
         }
-    }
-    @name(".start") state start {
-        tofino_parser.apply(pkt, ig_intr_md);
-        transition parse_ethernet_outer;
     }
 }
 
@@ -595,7 +596,7 @@ CTL_INGRESS {
     @name("._drop") action _drop() {
         IN_MARK_TO_DROP();
     }
-    @name(".a_bng_tocp") action a_bng_tocp(bit<48> ourOuterMAC, bit<48> remoteOuterMAC, bit<9> cpPhysicalPort) {
+    @name(".a_bng_tocp") action a_bng_tocp(PortId_t cpPhysicalPort) {
         # hdr.bng_cp.setValid();
         # hdr.bng_cp.eth_dstAddr = hdr.ethernet_outer.dstAddr;
         # hdr.bng_cp.eth_srcAddr = hdr.ethernet_outer.srcAddr;
@@ -649,6 +650,8 @@ CTL_INGRESS {
         key = {
             hdr.ethernet_outer.dstAddr  : exact;
             hdr.ethernet_outer.etherType: exact;
+	    hdr.pppoe.protocol		: exact;
+	    hdr.pppoe.code		: exact;
         }
         max_size = 32;
     }
