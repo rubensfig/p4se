@@ -295,6 +295,7 @@ CTL_INGRESSUPSTREAM {
     }
     @name(".a_us_routev4v6") action a_us_routev4v6(bit<9> out_port, bit<20> mpls0_label, bit<20> mpls1_label, bit<48> via_hwaddr) {
         hdr.vlan_service.setInvalid();
+        hdr.vlan_subscriber.setInvalid();
         SET_EGRESS_PORT(out_port);
         hdr.mpls0.label = mpls0_label;
         hdr.mpls1.label = mpls1_label;
