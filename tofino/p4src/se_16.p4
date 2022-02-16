@@ -111,7 +111,7 @@ PARSER_INGRESS {
         transition parse_ethernet_outer;
     }
 
-    @name(".mpls_0_accesslabels") value_set<bit<20>>(4) mpls_0_accesslabels;
+    # @name(".mpls_0_accesslabels") value_set<bit<20>>(4) mpls_0_accesslabels;
     @name(".parse_above_mpls") state parse_above_mpls {
         transition select(hdr.mpls0.label) {
             default: parse_ip;
@@ -650,8 +650,6 @@ CTL_INGRESS {
         key = {
             hdr.ethernet_outer.dstAddr  : exact;
             hdr.ethernet_outer.etherType: exact;
-	    hdr.pppoe.protocol		: exact;
-	    hdr.pppoe.code		: exact;
         }
         max_size = 32;
     }
@@ -672,23 +670,23 @@ CTL_INGRESS {
     @name(".ingress_downstream") IngressDownstream() ingress_downstream_0;
     apply {
         t_bng_fromcp.apply();
-        if (hdr.bng_cp.isValid()) {
-        } else {
-            t_cptap_outer_ethernet.apply();
-            if (meta.ingress_md.cp == 1w0) {
-                t_usds.apply();
-                if (meta.ingress_md.usds == 2w0x1 && hdr.pppoe.isValid()) {
-                    ingress_upstream_0.apply(hdr, meta, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
-                } else {
-                    if (meta.ingress_md.usds == 2w0x0) {
-                    ingress_downstream_0.apply(hdr, meta, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
-                    }
-                }
-            }
-            if (meta.ingress_md.cp == 1w1) {
-                t_bng_tocp.apply();
-            }
-        }
+
+    	t_cptap_outer_ethernet.apply();
+
+    	if (meta.ingress_md.cp == 1w0) {
+    	    t_usds.apply();
+    	    if (meta.ingress_md.usds == 2w0x1 && hdr.pppoe.isValid()) {
+    	        ingress_upstream_0.apply(hdr, meta, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
+    	    } else {
+    	        if (meta.ingress_md.usds == 2w0x0) {
+    	        ingress_downstream_0.apply(hdr, meta, ig_intr_md, ig_prsr_md, ig_dprsr_md, ig_tm_md);
+    	        }
+    	    }
+    	}
+
+    	if (meta.ingress_md.cp == 1w1) {
+    	    t_bng_tocp.apply();
+    	}
     }
 }
 
