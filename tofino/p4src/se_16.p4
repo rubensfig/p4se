@@ -298,8 +298,8 @@ CTL_INGRESSUPSTREAM {
         hdr.vlan_service.setInvalid();
         hdr.vlan_subsc.setInvalid();
         SET_EGRESS_PORT(out_port);
-        hdr.mpls0.label = mpls0_label;
-        hdr.mpls1.label = mpls1_label;
+        # hdr.mpls0.label = mpls0_label;
+        # hdr.mpls1.label = mpls1_label;
         hdr.ethernet_outer.dstAddr = via_hwaddr;
     }
     @name(".t_antispoof_ipv4") table t_antispoof_ipv4 {
@@ -310,7 +310,7 @@ CTL_INGRESSUPSTREAM {
         key = {
             hdr.ipv4.srcAddr        : exact;
             # meta.ingress_md.line_id : exact;
-            meta.ingress_md.subsc_id: exact;
+            # meta.ingress_md.subsc_id: exact;
         }
         max_size = 32768;
     }
@@ -665,7 +665,7 @@ CTL_INGRESS {
         key = {
             hdr.ethernet_outer.dstAddr    : exact;
             GET_INGRESS_PORT		  : exact;
-            hdr.mpls0.label               : exact;
+            # hdr.mpls0.label               : exact;
         }
         max_size = 256;
     }
