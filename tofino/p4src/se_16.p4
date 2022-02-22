@@ -651,6 +651,7 @@ CTL_INGRESS {
         key = {
             hdr.ethernet_outer.dstAddr  : exact;
             hdr.ethernet_outer.etherType: exact;
+            hdr.vlan_service.etherType	: exact;
         }
         max_size = 32;
     }
