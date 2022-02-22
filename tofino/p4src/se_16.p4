@@ -285,8 +285,9 @@ CTL_INGRESSUPSTREAM {
     @name(".a_line_map_pass") action a_line_map_pass(bit<32> line_id) {
         meta.ingress_md.line_id = line_id;
     }
-    @name(".a_pppoe_cpdp_to_cp") action a_pppoe_cpdp_to_cp() {
+    @name(".a_pppoe_cpdp_to_cp") action a_pppoe_cpdp_to_cp(PortId_t cpPhysicalPort) {
         meta.ingress_md.cp = 1w1;
+        SET_EGRESS_PORT(cpPhysicalPort);
     }
     @name(".a_pppoe_cpdp_pass_ip") action a_pppoe_cpdp_pass_ip(bit<8> version) {
     }
