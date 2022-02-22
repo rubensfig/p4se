@@ -282,9 +282,9 @@ CTL_INGRESSUPSTREAM {
         meta.ingress_md.subsc_id = subsc_id;
         # ctr_us_subsc.count((bit<13>)ctr_bucket);
     }
-    #@name(".a_line_map_pass") action a_line_map_pass(bit<32> line_id) {
-    #    meta.ingress_md.line_id = line_id;
-    #}
+    @name(".a_line_map_pass") action a_line_map_pass(bit<32> line_id) {
+        meta.ingress_md.line_id = line_id;
+    }
     @name(".a_pppoe_cpdp_to_cp") action a_pppoe_cpdp_to_cp(PortId_t cpPhysicalPort) {
         meta.ingress_md.cp = 1w1;
         SET_EGRESS_PORT(cpPhysicalPort);
