@@ -414,7 +414,7 @@ CTL_INGRESSUPSTREAM {
         max_size = 256;
     }
     apply {
-        t_line_map.apply();
+        # t_line_map.apply();
         t_pppoe_cpdp.apply();
         if (meta.ingress_md.cp == 1w0) {
             t_antispoof_mac.apply();
