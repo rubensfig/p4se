@@ -282,9 +282,9 @@ CTL_INGRESSUPSTREAM {
         meta.ingress_md.subsc_id = subsc_id;
         # ctr_us_subsc.count((bit<13>)ctr_bucket);
     }
-    @name(".a_line_map_pass") action a_line_map_pass(bit<32> line_id) {
-        meta.ingress_md.line_id = line_id;
-    }
+    #@name(".a_line_map_pass") action a_line_map_pass(bit<32> line_id) {
+    #    meta.ingress_md.line_id = line_id;
+    #}
     @name(".a_pppoe_cpdp_to_cp") action a_pppoe_cpdp_to_cp(PortId_t cpPhysicalPort) {
         meta.ingress_md.cp = 1w1;
         SET_EGRESS_PORT(cpPhysicalPort);
@@ -309,7 +309,7 @@ CTL_INGRESSUPSTREAM {
         }
         key = {
             hdr.ipv4.srcAddr        : exact;
-            meta.ingress_md.line_id : exact;
+            # meta.ingress_md.line_id : exact;
             meta.ingress_md.subsc_id: exact;
         }
         max_size = 32768;
@@ -321,7 +321,7 @@ CTL_INGRESSUPSTREAM {
         }
         key = {
             hdr.ipv6.srcAddr[127:64]: exact @name("ipv6.srcAddr") ;
-            meta.ingress_md.line_id : exact;
+            # meta.ingress_md.line_id : exact;
             meta.ingress_md.subsc_id: exact;
         }
         max_size = 32768;
@@ -333,7 +333,7 @@ CTL_INGRESSUPSTREAM {
         }
         key = {
             hdr.ipv6.srcAddr[127:72]: exact @name("ipv6.srcAddr") ;
-            meta.ingress_md.line_id : exact;
+            # meta.ingress_md.line_id : exact;
             meta.ingress_md.subsc_id: exact;
         }
         max_size = 32768;
@@ -344,7 +344,7 @@ CTL_INGRESSUPSTREAM {
             a_antispoof_mac_pass;
         }
         key = {
-            meta.ingress_md.line_id   : exact;
+            # meta.ingress_md.line_id   : exact;
             hdr.vlan_service.vlanID   : exact;
             # hdr.ethernet_inner.srcAddr: exact;
             hdr.pppoe.sessionID       : exact;
