@@ -162,8 +162,8 @@ PARSER_INGRESS {
     @name(".parse_pppoe") state parse_pppoe {
         pkt.extract(hdr.pppoe);
         transition select(hdr.pppoe.protocol) {
-            16w0x21: parse_ip;
-            16w0x57: parse_ip;
+            16w0x21: parse_ipv4;
+            16w0x57: parse_ipv6;
             default: accept;
         }
     }
@@ -296,7 +296,6 @@ CTL_INGRESSUPSTREAM {
     }
     @name(".a_us_routev4v6") action a_us_routev4v6(bit<9> out_port, bit<20> mpls0_label, bit<20> mpls1_label, bit<48> via_hwaddr) {
         hdr.vlan_service.setInvalid();
-        hdr.vlan_subsc.setInvalid();
         SET_EGRESS_PORT(out_port);
         # hdr.mpls0.label = mpls0_label;
         # hdr.mpls1.label = mpls1_label;
